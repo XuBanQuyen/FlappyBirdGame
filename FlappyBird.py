@@ -34,13 +34,26 @@ def bird_animation():
     new_bird = bird_list[bird_index]
     new_bird_rect = new_bird.get_rect(center=(100,bird_rect.centery))
     return new_bird,new_bird_rect
+def score_display(game_state):
+   if game_state == 'main game':
+    score_surface = game_font.render(str(int(score)),True,(255,255,255))
+    score_rect = score_surface.get_rect(center=(216,100))
+    screen.blit(score_surface,score_rect)
+   if game_state == 'game_over':
+    score_surface = game_font.render(str(int(score)),True,(255,255,255))
+    score_rect = score_surface.get_rect(center=(216,100))
+    screen.blit(score_surface,score_rect)
+    
 pygame.init()
 screen = pygame.display.set_mode((432,768))
 clock = pygame.time.Clock()
+game_font = pygame.font.Font('04B_19,ttf',40)
 #tạo các biến cho trò chơi
 gravity = 0.25
 bird_movement = 0
 game_active = True
+score = 0
+high_score = 0
 #tạo background
 bg = pygame.image.load('assets/background-night.png').convert()
 bg = pygame.transform.scale2x(bg)
@@ -104,6 +117,8 @@ while True:
         #ống
         pipe_list = move_pipe(pipe_list)
         draw_pipe(pipe_list)
+        score += 0.01
+        score_display()
     #sàn
     floor_x_pos -= 1
     draw_floor()
