@@ -30,7 +30,10 @@ def check_collision(pipes):
 def rotate_bird(bird1):
     new_bird = pygame.transform.rotozoom(bird1,-bird_movement*3,1)
     return new_bird
-
+def bird_animation():
+    new_bird = bird_list[bird_index]
+    new_bird_rect = new_bird.get_rect(center=(100,bird_rect.centery))
+    return new_bird,new_bird_rect
 pygame.init()
 screen = pygame.display.set_mode((432,768))
 clock = pygame.time.Clock()
@@ -44,14 +47,21 @@ bg = pygame.transform.scale2x(bg)
 #tạo sàn
 floor = pygame.image.load('assets/floor.png').convert()
 floor = pygame.transform.scale2x(floor)
-floor_x_pos=0
+floor_x_pos = 0
 #tạo chim
-bird_down = pygame.transform.scale2x(pygame.image.load('assets/yellow-downflap.png').convert_alpha())
-bird_mid = pygame.transform.scale2x(pygame.image.load('assets/yellow-midflap.png').convert_alpha())
-bird_up = pygame.transform.scale2x(pygame.image.load('assets/yellow-upflap.png').convert_alpha())
-bird = pygame.image.load('assets/yellow-midflap.png').convert_alpha()
-bird = pygame.transform.scale2x(bird)
+bird_down = pygame.transform.scale2x(pygame.image.load('assets/yellowbird-downflap.png').convert_alpha())
+bird_mid = pygame.transform.scale2x(pygame.image.load('assets/yellowbird-midflap.png').convert_alpha())
+bird_up = pygame.transform.scale2x(pygame.image.load('assets/yellowbird-upflap.png').convert_alpha())
+bird_list = [bird_down,bird_mid,bird_up] #0 1 2
+bird_index = 0
+bird = bird_list[bird_index]
+#bird = pygame.image.load('assets/yellowbird-midflap.png').convert_alpha()
+#bird = pygame.transform.scale2x(bird)
 bird_rect=bird.get_rect(center=(100,384))
+
+#tạo timer cho bird
+birdflap = pygame.USEREVENT + 1
+pygame.time.set_timer(birdflap,200)
 #tạo ống
 pipe_surface = pygame.image.load('assets/pipe-green.png').convert()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
@@ -60,6 +70,7 @@ pipe_list = []
 spawnpipe = pygame.USEREVENT
 pygame.time.set_timer(spawnpipe,1200)
 pipe_height = [200,300,400]
+#while loop của trò chơi
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -76,7 +87,12 @@ while True:
                 bird_movement = 0
         if event.type == spawnpipe:
             pipe_list.extend(create_pipe())
-
+        if event.type == birdflap:
+            if bird_index < 2:
+                bird_index += 1
+            else:
+                bird_index = 0
+            bird,bird_rect = bird_animation()
     screen.blit(bg,(0,0))
     if game_active:
         #chim
