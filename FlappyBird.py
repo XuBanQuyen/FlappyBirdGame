@@ -47,16 +47,16 @@ def score_display(game_state):
     
     high_score_surface = game_font.render(f'High Score:{int(high_score)}',True,(255,255,255))
     higt_score_rect = high_score_surface.get_rect(center=(216,630))
-    screen.blit(high_score_surface,high_score_rect)
+    screen.blit(high_score_surface,higt_score_rect)
 def update_score(score,high_score):
     if score > high_score:
         high_score = score
-    return hight_score
+    return high_score
 pygame.mixer.pre_init(frequency=44100,size=-16,channels=2,buffer=512)
 pygame.init()
 screen = pygame.display.set_mode((432,768))
 clock = pygame.time.Clock()
-game_font = pygame.font.Font('04B_19,ttf',40)
+game_font = pygame.font.Font('04B_19.ttf',40)
 #tạo các biến cho trò chơi
 gravity = 0.25
 bird_movement = 0
